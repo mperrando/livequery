@@ -95,6 +95,12 @@
         },
         isStopped: function() {
             return this.stopped === true;
+        },
+        find: function(element) {
+            if ( this.isStopped() ) {
+                return $([]);
+            }
+            return $(element, this.context).find(this.selector);
         }
     };
 
@@ -139,6 +145,11 @@
                             query.added(target);
                         }, 1);
                     }
+                    query.find(target).each(function (i, element) {
+                        setTimeout(function() {
+                            query.added(element);
+                        }, 1);
+                    });
                 });
             },
             removed: function(target) {

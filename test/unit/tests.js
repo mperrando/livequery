@@ -22,11 +22,24 @@ test("Fires for existing matched elements", 4, function() {
 
 test("Fires for newly added matched elements (via jQuery)", 1, function() {
   stop();
-  var $li = $('<li id="newli">New</li>');
+  var $li = $('<li id="newli">New</li>'), n = 0;
   this.$target.livequery('li', $.proxy(function(elem) {
     if (elem.id === "newli") {
       ok( $(elem).is('li'), 'It is an li element' );
       this.$target.expire('li');
+      start();
+    }
+  }, this));
+  this.$target.find('ol').append($li);
+});
+
+test("Fires for newly nested added matched elements (via jQuery)", 1, function() {
+  stop();
+  var $li = $('<li id="newli"><a id="important">important</a></li>'), n = 0;
+  this.$target.livequery('a#important', $.proxy(function(elem) {
+    if (elem.id === "important") {
+      ok( $(elem).is('a'), 'It is an a element' );
+      this.$target.expire('a#important');
       start();
     }
   }, this));
